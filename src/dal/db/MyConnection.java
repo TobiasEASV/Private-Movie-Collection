@@ -42,9 +42,4 @@ public class MyConnection {
     public Connection getConnection() throws SQLServerException {
         return ds.getConnection();
     }
-
-    public static void main(String[] args) throws IOException, SQLException {
-        MyConnection myConnection = new MyConnection();
-        System.out.println(myConnection.getConnection().isClosed());
-    }
 }
