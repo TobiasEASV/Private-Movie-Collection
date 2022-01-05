@@ -1,6 +1,9 @@
 package dal.interfaces;
 
+import be.Movie;
 import be.MovieException;
+
+import java.util.List;
 
 public interface IMovieRepository {
 

@@ -1,11 +1,13 @@
 package dal.db;
 
+import be.Movie;
 import be.MovieException;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.interfaces.IMovieRepository;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 
 public class DAOMovie implements IMovieRepository {
 
@@ -22,11 +24,12 @@ public class DAOMovie implements IMovieRepository {
 
     @Override
     public Movie createMovie(String title, String IMDBrating, String genre, double duration, String pathToFile) throws MovieException {
-        try (Connection connection = databaseConnector.getConnection()) {
+        /**try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, IMDBrating);
+
             preparedStatement.setDouble(3, personalrating);
             preparedStatement.setString(4, filepath);
             preparedStatement.setObject(5, lastview);
@@ -42,7 +45,7 @@ public class DAOMovie implements IMovieRepository {
             }
         } catch (SQLException | MovieException SQLex) {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
-        }
+        }*/
         return null;
     }
 
@@ -55,4 +58,6 @@ public class DAOMovie implements IMovieRepository {
     public void deleteMovie(Movie movie) throws MovieException {
 
     }
+
 }
+

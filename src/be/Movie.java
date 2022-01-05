@@ -1,6 +1,5 @@
 package be;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Movie {
