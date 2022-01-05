@@ -1,6 +1,10 @@
 package dal.interfaces;
 
+import be.Movie;
 import be.MovieException;
+
+import java.util.Date;
+import java.util.List;
 
 public interface IMovieRepository {
 
@@ -8,7 +12,7 @@ public interface IMovieRepository {
 
     public List<Movie> getAllMovies() throws MovieException;
 
-    public Movie createMovie(String title, String artist, String genre, double duration, String pathToFile) throws MovieException;
+    public Movie createMovie(String name, double IMDBRating, String pathToFile, Date lastView) throws MovieException;
 
     public void updateMovie(Movie movie) throws MovieException;
 
