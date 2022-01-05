@@ -1,6 +1,5 @@
 package be;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Movie {
@@ -11,7 +10,6 @@ public class Movie {
     private Date lastView;
     private double personalRating;
 
-    private DecimalFormat oneDecimal = new DecimalFormat("#.#");
 
     /**
      *  constructor for song used for creating an instance of a Movie.
@@ -19,14 +17,14 @@ public class Movie {
      * @param name the name of the movie.
      * @param IMDBRating the IMDBRating of the movie.
      * @param pathToFile the local location of the movie.
-     * @param lastView the date of the last time the movie was viewed.
      */
-    public Movie(int id, String name, double IMDBRating, String pathToFile, Date lastView) {
+    public Movie(int id, String name, double IMDBRating, String pathToFile) {
         this.id = id;
         this.name = name;
         this.IMDBRating = IMDBRating;
         this.pathToFile = pathToFile;
         this.setLastView(null);
+        this.setPersonalRating(-1); //if the personal rating is -1 it has not been rated
     }
 
     /**
@@ -50,7 +48,7 @@ public class Movie {
      * @return the Artist of a song.
      */
     public double getIMDBRating() {
-        return Double.valueOf(oneDecimal.format(this.IMDBRating));
+        return this.IMDBRating;
     }
 
     /**
@@ -82,7 +80,7 @@ public class Movie {
      * @return returns a double with one decimal
      */
     public double getPersonalRating() {
-        return Double.valueOf(oneDecimal.format(this.personalRating));
+        return this.personalRating;
     }
 
     /**

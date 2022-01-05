@@ -14,10 +14,13 @@ public class MovieModel {
     private ObjectProperty lastView = new SimpleObjectProperty<Date>();
     private DoubleProperty personalRating = new SimpleDoubleProperty();
 
-    private DecimalFormat oneDecimal = new DecimalFormat("#.#");
-
-    public MovieModel(int id, String name, double IMDBRating, String pathToFile, Date lastView){
-
+    public MovieModel(Movie movie){
+        setIdProperty(movie.getId());
+        setNameProperty(movie.getName());
+        setIMDBRatingProperty(movie.getIMDBRating());
+        setPathToFileProperty(movie.getPathToFile());
+        setLastViewProperty(movie.getLastView());
+        setPersonalRatingProperty(movie.getPersonalRating());
     }
 
     /**
@@ -72,7 +75,7 @@ public class MovieModel {
      * Used for setting the path of the movie locally.
      * @param pathToFile
      */
-    public void setFileToPathProperty(String pathToFile){
+    public void setPathToFileProperty(String pathToFile){
         getPathToFileProperty().set(pathToFile);
     }
 
@@ -88,7 +91,7 @@ public class MovieModel {
      * used for getting the Date of when the song was viewed last.
      * @return returns a ObjectProperty of type Date of when the movie was last viewed.
      */
-    public ObjectProperty getLastView() {
+    public ObjectProperty getLastViewProperty() {
         return lastView;
     }
 
@@ -96,8 +99,24 @@ public class MovieModel {
      * sets the Date of when the movie was last viewed.
      * @param lastView
      */
-    public void setLastView(Date lastView) {
-        getLastView().set(lastView);
+    public void setLastViewProperty(Date lastView) {
+        getLastViewProperty().set(lastView);
+    }
+
+    /**
+     * sets the personal rating of when the movie.
+     * @param personalRating a double
+     */
+    public void setPersonalRatingProperty(double personalRating) {
+        getPersonalRatingProperty().set(personalRating);
+    }
+
+    /**
+     * used for getting the personal rating of the movie.
+     * @return returns a DoubleProperty of the movie.
+     */
+    private DoubleProperty getPersonalRatingProperty() {
+        return personalRating;
     }
 
     /**
@@ -105,6 +124,6 @@ public class MovieModel {
      * @return a movie object with the same fields as the movieModel
      */
     public Movie convertToMovie(){
-        return new Movie(id.get(), name.get(), IMDBRating.get(), pathToFile.get(), (Date)lastView.get());
+        return new Movie(id.get(), name.get(), IMDBRating.get(), pathToFile.get());
     }
 }
