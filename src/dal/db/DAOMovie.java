@@ -24,7 +24,7 @@ public class DAOMovie implements IMovieRepository {
 
     @Override
     public Movie createMovie(String title, String IMDBrating, String genre, double duration, String pathToFile) throws MovieException {
-        /**try (Connection connection = databaseConnector.getConnection()) {
+        try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, title);
@@ -45,7 +45,7 @@ public class DAOMovie implements IMovieRepository {
             }
         } catch (SQLException | MovieException SQLex) {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
-        }*/
+        }
         return null;
     }
 
