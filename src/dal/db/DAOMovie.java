@@ -23,7 +23,7 @@ public class DAOMovie implements IMovieRepository {
     }
 
     @Override
-    public Movie createMovie(String name, double IMDBRating, String pathToFile, Date lastView) throws MovieException {
+    public Movie createMovie(String name, double IMDBRating, String pathToFile) throws MovieException {
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -31,7 +31,7 @@ public class DAOMovie implements IMovieRepository {
             preparedStatement.setDouble(2, IMDBRating);
             preparedStatement.setDouble(3, -1); // Personal Rating -default to -1 when it is created
             preparedStatement.setString(4, pathToFile);
-            preparedStatement.setObject(5, lastView);
+            preparedStatement.setObject(5, null);
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 1) {
@@ -39,7 +39,7 @@ public class DAOMovie implements IMovieRepository {
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
 
-                    return new Movie(id, name, IMDBRating, pathToFile, lastView);
+                    return new Movie(id, name, IMDBRating, pathToFile);
                 }
             }
         } catch (SQLException SQLex) {
@@ -57,12 +57,28 @@ public class DAOMovie implements IMovieRepository {
     @Override
     public void deleteMovie(Movie movie) throws MovieException {
 
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "DELETE Movie WHERE id = (?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, movie.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows > 1){
+                throw new MovieException("Too many row affected");
+            }
+
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
+
+
     }
 
     public static void main(String[] args) throws IOException, MovieException {
         DAOMovie test = new DAOMovie();
-        Movie movie = test.createMovie("test", 3.2,"//test//", null);
-        movie.setLastView(new Date());
+        Movie movie = test.createMovie("test", 3,"//test//", null);
         System.out.println(movie.getId() + " " + movie.getName() + " " + movie.getIMDBRating()+ " " + movie.getPersonalRating()+ " " + movie.getPathToFile()+ " " + movie.getLastView() );
+        //test.deleteMovie(movie);
+
     }
 }
