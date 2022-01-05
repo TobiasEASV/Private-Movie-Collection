@@ -16,8 +16,12 @@ public class MovieModel {
 
     private DecimalFormat oneDecimal = new DecimalFormat("#.#");
 
-    public MovieModel(int id, String name, double IMDBRating, String pathToFile, Date lastView){
-
+    public MovieModel(Movie movie){
+        setIdProperty(movie.getId());
+        setNameProperty(movie.getName());
+        setIMDBRatingProperty(movie.getIMDBRating());
+        setPathToFileProperty(movie.getPathToFile());
+        setLastView(movie.getLastView());
     }
 
     /**
@@ -72,7 +76,7 @@ public class MovieModel {
      * Used for setting the path of the movie locally.
      * @param pathToFile
      */
-    public void setFileToPathProperty(String pathToFile){
+    public void setPathToFileProperty(String pathToFile){
         getPathToFileProperty().set(pathToFile);
     }
 

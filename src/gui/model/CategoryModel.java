@@ -15,9 +15,9 @@ public class CategoryModel {
      * @param id the id of the category
      * @param name the name of the category
      */
-    public CategoryModel(int id, String name){
-        setIdProperty(id);
-        setNameProperty(name);
+    public CategoryModel(Category category){
+        setIdProperty(category.getId());
+        setNameProperty(category.getName());
     }
 
     /**
