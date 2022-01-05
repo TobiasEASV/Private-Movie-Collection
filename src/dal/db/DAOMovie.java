@@ -51,6 +51,55 @@ public class DAOMovie implements IMovieRepository {
     @Override
     public void updateMovie(Movie movie) throws MovieException {
 
+        try(Connection connection = databaseConnector.getConnection()) {
+            String sql = "UPDATE Movie SET title = ?, filepath=?, IMDBrating=? WHERE Id=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, movie.getName());
+            preparedStatement.setString(2, movie.getPathToFile());
+            preparedStatement.setDouble(3, movie.getIMDBRating());
+            preparedStatement.setDouble(4, movie.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows != 1) {
+                throw new MovieException("Too many row affected");
+            }
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
+    }
+
+    public void updateLastview(Movie movie) throws MovieException {
+
+        try(Connection connection = databaseConnector.getConnection()) {
+            String sql = "UPDATE Movie SET lastview = ? WHERE Id= ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, movie.getLastView());
+            preparedStatement.setDouble(2, movie.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows != 1) {
+                throw new MovieException("Too many row affected");
+            }
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
+    }
+
+    public void updatePersonalRating(Movie movie) throws MovieException {
+
+        try(Connection connection = databaseConnector.getConnection()) {
+            String sql = "UPDATE Movie SET personalrating = ? WHERE Id= ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDouble(1, movie.getPersonalRating());
+            preparedStatement.setDouble(2, movie.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows != 1) {
+                throw new MovieException("Too many row affected");
+            }
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
     }
 
 
@@ -63,15 +112,13 @@ public class DAOMovie implements IMovieRepository {
             preparedStatement.setInt(1, movie.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
-            if(affectedRows > 1){
+            if(affectedRows != 1){
                 throw new MovieException("Too many row affected");
             }
 
         } catch (SQLException SQLex) {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
         }
-
-
     }
 
     public static void main(String[] args) throws IOException, MovieException {
