@@ -1,11 +1,13 @@
 package dal.db;
 
+import be.Movie;
 import be.MovieException;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.interfaces.IMovieRepository;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Date;
+import java.util.List;
 
 public class DAOMovie implements IMovieRepository {
 
@@ -21,15 +23,15 @@ public class DAOMovie implements IMovieRepository {
     }
 
     @Override
-    public Movie createMovie(String title, String IMDBrating, String genre, double duration, String pathToFile) throws MovieException {
+    public Movie createMovie(String name, double IMDBRating, String pathToFile, Date lastView) throws MovieException {
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, title);
-            preparedStatement.setString(2, IMDBrating);
-            preparedStatement.setDouble(3, personalrating);
-            preparedStatement.setString(4, filepath);
-            preparedStatement.setObject(5, lastview);
+            preparedStatement.setString(1, name);
+            preparedStatement.setDouble(2, IMDBRating);
+            preparedStatement.setDouble(3, -1); // Personal Rating -default to -1 when it is created
+            preparedStatement.setString(4, pathToFile);
+            preparedStatement.setObject(5, lastView);
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 1) {
@@ -37,10 +39,10 @@ public class DAOMovie implements IMovieRepository {
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
 
-                    return new Movie(id, title, artist, genre, duration, pathToFile);
+                    return new Movie(id, name, IMDBRating, pathToFile, lastView);
                 }
             }
-        } catch (SQLException | MovieException SQLex) {
+        } catch (SQLException SQLex) {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
         }
         return null;
@@ -51,8 +53,16 @@ public class DAOMovie implements IMovieRepository {
 
     }
 
+
     @Override
     public void deleteMovie(Movie movie) throws MovieException {
 
+    }
+
+    public static void main(String[] args) throws IOException, MovieException {
+        DAOMovie test = new DAOMovie();
+        Movie movie = test.createMovie("test", 3.2,"//test//", null);
+        movie.setLastView(new Date());
+        System.out.println(movie.getId() + " " + movie.getName() + " " + movie.getIMDBRating()+ " " + movie.getPersonalRating()+ " " + movie.getPathToFile()+ " " + movie.getLastView() );
     }
 }
