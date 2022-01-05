@@ -1,8 +1,11 @@
 package gui.controller;
 
+import javafx.animation.PauseTransition;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
@@ -19,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -35,8 +39,9 @@ import java.util.concurrent.Callable;
 
 public class MediaPlayerController implements Initializable {
 
+
     @FXML
-    private VBox vBoxParent;
+    private AnchorPane anchorpaneParrent;
 
     @FXML
     private MediaView mvMovie;
@@ -49,7 +54,7 @@ public class MediaPlayerController implements Initializable {
     private Slider sliderVolume;
 
     @FXML
-    private HBox hBoxControls;
+    private VBox hBoxControls;
     @FXML
     private HBox hBoxVolume;
 
@@ -69,7 +74,9 @@ public class MediaPlayerController implements Initializable {
 
     private boolean atEndOfVideo = false;
     private boolean isPlaying = true;
-    private boolean isMuted = true;
+    private boolean isMuted = false;
+    private BooleanProperty mouseMoving = new SimpleBooleanProperty();
+    private final long MIN_STATIONARY_TIME = 200_000_000 ; // nanoseconds that the cursor have to be stationary to be considered idle
 
     /*Images for the different labels in the view*/
     private ImageView ivPlay;
@@ -124,7 +131,8 @@ public class MediaPlayerController implements Initializable {
         ivExitFullscreen.setFitWidth(IV_SIZE);
 
         buttonPlayPauseReplay.setGraphic(ivPause);
-        labelVolume.setGraphic(ivMute);
+        sliderVolume.setValue(0.5);
+        labelVolume.setGraphic(ivVolume);
         labelSpeed.setText("1X");
         labelFullScreen.setGraphic(ivFullScreen);
         mpMovie.play();
@@ -132,8 +140,8 @@ public class MediaPlayerController implements Initializable {
         buttonPlayPauseReplay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                bindCurrentTimeLabel();// rebind the current time label, for when the movie has ended and we press replay
                 Button buttonPlay = (Button) event.getSource();
+                bindCurrentTimeLabel();// rebind the current time label, for when the movie has ended and we press replay
                 if(atEndOfVideo){
                     sliderTime.setValue(0);
                     atEndOfVideo = false;
@@ -145,7 +153,7 @@ public class MediaPlayerController implements Initializable {
                     isPlaying = false;
                 } else {
                     buttonPlay.setGraphic(ivPause);
-                    mpMovie.pause();
+                    mpMovie.play();
                     isPlaying = true;
                 }
             }
@@ -249,13 +257,36 @@ public class MediaPlayerController implements Initializable {
         });
 
         //Listener for the scene for when we're resizing the scene
-        vBoxParent.sceneProperty().addListener(new ChangeListener<Scene>() {
+        anchorpaneParrent.sceneProperty().addListener(new ChangeListener<Scene>() {
             @Override
             public void changed(ObservableValue<? extends Scene> observable, Scene oldScene, Scene newScene) {
                 if (oldScene == null && newScene != null){
                     // bind our mediaview to the height of the parent Scene and subtract the heigh of the container that holds our control buttons plus a little extra
-                    mvMovie.fitHeightProperty().bind(newScene.heightProperty().subtract(hBoxControls.heightProperty().add(20)));
+                    mvMovie.fitHeightProperty().bind(newScene.heightProperty().subtract(hBoxControls.getHeight()+sliderTime.getHeight()));
                 }
+            }
+        });
+
+        //if the mouse stops moving after a
+        mouseMoving.addListener((obs, wasMoving, isNowMoving) -> {
+            if (! isNowMoving) {
+                anchorpaneParrent.getChildren().remove(hBoxControls);
+            }
+        });
+
+        // a transiotion that plays and when it is finished it sets the mouseMoving to false
+        PauseTransition pause = new PauseTransition(Duration.millis(MIN_STATIONARY_TIME / 100_000));
+        pause.setOnFinished(e -> mouseMoving.set(false));
+
+        //when the mouse is moved within the window the pausetransition above is reset
+        anchorpaneParrent.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mouseMoving.set(true);
+                if(anchorpaneParrent.lookup("#hBoxControls") == null) {
+                    anchorpaneParrent.getChildren().add(hBoxControls);
+                }
+                pause.playFromStart();
             }
         });
 
@@ -308,7 +339,7 @@ public class MediaPlayerController implements Initializable {
             }
         });
 
-
+        //changes the slider value to that of the new time as the movie progresses
         sliderTime.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
