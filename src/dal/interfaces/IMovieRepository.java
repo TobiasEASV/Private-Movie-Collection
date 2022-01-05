@@ -12,7 +12,7 @@ public interface IMovieRepository {
 
     public List<Movie> getAllMovies() throws MovieException;
 
-    public Movie createMovie(String name, double IMDBRating, String pathToFile, Date lastView) throws MovieException;
+    public Movie createMovie(String name, double IMDBRating, String pathToFile) throws MovieException;
 
     public void updateMovie(Movie movie) throws MovieException;
 

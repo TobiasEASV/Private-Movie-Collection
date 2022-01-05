@@ -76,7 +76,7 @@ public class DAOMovie implements IMovieRepository {
 
     public static void main(String[] args) throws IOException, MovieException {
         DAOMovie test = new DAOMovie();
-        Movie movie = test.createMovie("test", 3,"//test//", null);
+        Movie movie = test.createMovie("test", 3,"//test//");
         System.out.println(movie.getId() + " " + movie.getName() + " " + movie.getIMDBRating()+ " " + movie.getPersonalRating()+ " " + movie.getPathToFile()+ " " + movie.getLastView() );
         //test.deleteMovie(movie);
 
