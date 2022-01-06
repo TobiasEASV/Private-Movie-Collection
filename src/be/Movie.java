@@ -2,7 +2,7 @@ package be;
 
 import java.util.Date;
 
-public class Movie {
+public class    Movie {
     private int id;
     private String name;
     private double IMDBRating;
