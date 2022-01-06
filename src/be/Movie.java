@@ -1,6 +1,8 @@
 package be;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
     private int id;
@@ -9,6 +11,7 @@ public class Movie {
     private String pathToFile;
     private Date lastView;
     private double personalRating;
+    private List<Category> categories;
 
 
     /**
@@ -25,6 +28,8 @@ public class Movie {
         this.pathToFile = pathToFile;
         this.setLastView(null);
         this.setPersonalRating(-1); //if the personal rating is -1 it has not been rated
+        this.categories = new ArrayList<>();
+
     }
 
     /**
@@ -89,5 +94,23 @@ public class Movie {
      */
     public void setPersonalRating(double personalRating) {
         this.personalRating = personalRating;
+    }
+
+    /**
+     * used to add a category to the movie
+     * @param category
+     */
+    public void addCategories(Category category){
+        categories.add(category);
+    }
+
+    public List<Category> getCategories(){
+        return categories;
+    }
+
+    @Override
+    public String toString() {
+        return id + " " +  name + " " + IMDBRating + " " +  pathToFile + " " +  lastView + " " +
+                personalRating + " " +  categories;
     }
 }
