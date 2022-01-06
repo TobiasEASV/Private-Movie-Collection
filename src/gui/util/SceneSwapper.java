@@ -24,8 +24,8 @@ public class SceneSwapper {
             Parent Scene = FXMLLoader.load(url);
             Scene ViewScene = new Scene(Scene);
             stage.setTitle("Private Movie Collection");
-            //Image image = new Image("/gui/Images/MyTunesLogo.png");
-            //stage.getIcons().add(image);
+            Image image = new Image("/gui/images/film_icon2.png");
+            stage.getIcons().add(image);
             stage.setScene(ViewScene);
             stage.show();
         }catch (IOException IOex){
