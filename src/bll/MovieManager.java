@@ -20,12 +20,12 @@ public class MovieManager {
         daoMovie = new DAOMovie();
     }
 
-    public Movie createMovie(String name, double imdbRating, String pathToFile) throws MovieException {
-        return daoMovie.createMovie(name, imdbRating, pathToFile);
-    }
-
     public List<Movie> getAllSongs() throws MovieException {
         return daoMovie.getAllMovies();
+    }
+
+    public Movie createMovie(String name, double imdbRating, String pathToFile) throws MovieException {
+        return daoMovie.createMovie(name, imdbRating, pathToFile);
     }
 
     public void deleteMovie(Movie movie) throws MovieException {
