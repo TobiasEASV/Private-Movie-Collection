@@ -31,7 +31,6 @@ public class DAOMovie implements IMovieRepository {
             preparedStatement.setDouble(2, IMDBRating);
             preparedStatement.setDouble(3, -1); // Personal Rating -default to -1 when it is created
             preparedStatement.setString(4, pathToFile);
-            preparedStatement.setObject(5, lastView);
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 1) {
@@ -39,7 +38,7 @@ public class DAOMovie implements IMovieRepository {
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
 
-                    return new Movie(id, name, IMDBRating, pathToFile, lastView);
+                    return new Movie(id, name, IMDBRating, pathToFile);
                 }
             }
         } catch (SQLException SQLex) {

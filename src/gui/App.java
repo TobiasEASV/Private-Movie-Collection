@@ -10,7 +10,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/MediaPlayer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/addNewMovie.fxml"));
         primaryStage.setTitle("Private Movie Collection");
         primaryStage.setScene(new Scene(root, 800, 450));
         primaryStage.show();
