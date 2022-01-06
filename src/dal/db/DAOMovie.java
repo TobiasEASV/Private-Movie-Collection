@@ -1,11 +1,13 @@
 package dal.db;
 
+import be.Category;
 import be.Movie;
 import be.MovieException;
 import dal.interfaces.IMovieRepository;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +21,48 @@ public class DAOMovie implements IMovieRepository {
 
     @Override
     public List<Movie> getAllMovies() throws MovieException {
-        return null;
+
+        List<Movie> allMovies = new ArrayList<>();
+
+        //Create a connection
+        try(Connection connection = databaseConnector.getConnection()){
+            String sql = "SELECT * FROM Movie;";
+            String sql1 = "SELECT * FROM Category FULL JOIN CatMovie ON Category.id = CatMovie.CatId WHERE CatMovie.movieId = ?;"; //1. sql command
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql1); //Create statement
+
+            //Extract data from DB
+            if(preparedStatement.execute()){
+                ResultSet resultSet = preparedStatement.getResultSet();
+                while(resultSet.next()){
+                    int movieId = resultSet.getInt("id");
+                    String movieTitle = resultSet.getString("title");
+                    double IMDBrating = resultSet.getDouble("IMDBrating");
+                    double personalrating = resultSet.getDouble("personalrating");
+                    String filepath = resultSet.getString("filepath");
+                    Date lastview = (Date) resultSet.getObject("lastview");
+
+                    Movie movie = new Movie(movieId, movieTitle, IMDBrating, filepath);
+                    movie.setPersonalRating(personalrating);
+                    movie.setLastView(lastview);
+
+                    preparedStatement1.setInt(1,movieId);
+                    if(preparedStatement1.execute()){
+                        ResultSet resultSet1 = preparedStatement1.getResultSet();
+                        while(resultSet1.next()) {
+                            int catId = resultSet1.getInt("id");
+                            String catTitle = resultSet1.getString("title");
+
+                            movie.addCategories(new Category(catId, catTitle));
+                        }
+                    }
+                    allMovies.add(movie);
+                }
+            }
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
+        return allMovies;
     }
 
     @Override
@@ -120,12 +163,11 @@ public class DAOMovie implements IMovieRepository {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
         }
     }
-
     public static void main(String[] args) throws IOException, MovieException {
         DAOMovie test = new DAOMovie();
-        Movie movie = test.createMovie("test", 3,"//test//");
-        System.out.println(movie.getId() + " " + movie.getName() + " " + movie.getIMDBRating()+ " " + movie.getPersonalRating()+ " " + movie.getPathToFile()+ " " + movie.getLastView() );
-        //test.deleteMovie(movie);
+        Movie movie;
+        List<Movie> movies = test.getAllMovies();
+        System.out.println(movies.get(3));
 
     }
 }
