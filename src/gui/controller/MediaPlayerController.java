@@ -91,7 +91,7 @@ public class MediaPlayerController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         final int IV_SIZE = 25; // the size of the pictures we set as the labels' background
 
-        mediaVideo = new Media(new File("E:\\Film\\Avengers Infinity War\\Avengers.Infinity.War.2018.1080p.mp4").toURI().toString());
+        mediaVideo = new Media(new File("C:\\Users\\Janwo\\OneDrive\\Desktop\\Grubby.mp4").toURI().toString());
         mpMovie = new MediaPlayer(mediaVideo);
         mvMovie.setMediaPlayer(mpMovie);
 
@@ -423,7 +423,7 @@ public class MediaPlayerController implements Initializable {
                 }
             } else { // if the current time and total time are the same
                 atEndOfVideo = true;
-                buttonPlayPauseReplay.setGraphic(ivRestart);
+                buttonPlayPauseReplay.setGraphic(ivRestart); // this might cause the play/ pause button to switch to the restart button unwanted mid-movie for a split second
             }
         }
     }
