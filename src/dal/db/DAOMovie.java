@@ -145,6 +145,18 @@ public class DAOMovie implements IMovieRepository {
         }
     }
 
+    public void addCategoryToMovie(Category category, Movie movie) throws MovieException {
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "INSERT INTO CatMovie VALUES (?,?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, category.getId());
+            preparedStatement.setInt(2, movie.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException SQLex) {
+            throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
+        }
+    }
+
 
     @Override
     public void deleteMovie(Movie movie) throws MovieException {
