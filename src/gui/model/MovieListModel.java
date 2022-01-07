@@ -14,7 +14,7 @@ public class MovieListModel {
 
     public MovieListModel() throws IOException, MovieException {
         movieManager = new MovieManager();
-        movieList = FXCollections.observableArrayList(movieManager.getAllSongs().stream().map(song -> new MovieModel(movie)).toList());
+        movieList = FXCollections.observableArrayList(movieManager.getAllSongs().stream().map(movie -> new MovieModel(movie)).toList());
     }
 
     /**
