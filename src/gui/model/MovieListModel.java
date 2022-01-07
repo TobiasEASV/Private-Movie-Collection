@@ -14,7 +14,7 @@ public class MovieListModel {
 
     public MovieListModel() throws IOException, MovieException {
         movieManager = new MovieManager();
-        movieList = FXCollections.observableArrayList(movieManager.getAllSongs().stream().map(song -> new MovieModel(movie)).toList());
+        movieList = FXCollections.observableArrayList(movieManager.getAllMovies().stream().map(movie -> new MovieModel(movie)).toList());
     }
 
     /**
@@ -62,8 +62,8 @@ public class MovieListModel {
      * Searches through song list, to find a Movie that matches the key word
      * @param query the key word, to search for
      */
-    public void searchSong(String query){
-        List<MovieModel> searchResults = movieManager.searchSong(query).stream().map(song ->
+    public void searchSong(String query) throws MovieException {
+        List<MovieModel> searchResults = movieManager.searchMovie(query).stream().map(movie ->
                 new MovieModel(movie)).toList();
 
         movieList.clear();

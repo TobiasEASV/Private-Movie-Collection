@@ -11,9 +11,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/addNewMovie.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/MainMenu.fxml"));
         primaryStage.setTitle("Private Movie Collection");
-        primaryStage.setScene(new Scene(root, 800, 450));
+        primaryStage.setScene(new Scene(root));
         Image image = new Image("/gui/images/film_icon2.png");
         primaryStage.getIcons().add(image);
         primaryStage.show();
