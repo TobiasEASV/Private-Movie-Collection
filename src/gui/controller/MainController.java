@@ -2,7 +2,7 @@ package gui.controller;
 
 import be.MovieException;
 import gui.model.MovieListModel;
-import gui.model.MovieModel;
+import be.MovieModel;
 import gui.util.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

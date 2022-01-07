@@ -1,11 +1,10 @@
-package gui.model;
+package be;
 
-import be.Movie;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.text.DecimalFormat;
+import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class MovieModel {
@@ -13,19 +12,18 @@ public class MovieModel {
     private StringProperty name = new SimpleStringProperty();
     private DoubleProperty IMDBRating = new SimpleDoubleProperty();
     private StringProperty pathToFile = new SimpleStringProperty();
-    private ObjectProperty lastView = new SimpleObjectProperty<Date>();
-    private DoubleProperty personalRating = new SimpleDoubleProperty();
+    private ObjectProperty<Date> lastView = new SimpleObjectProperty<>();
+    private DoubleProperty personalRating = new SimpleDoubleProperty();;
     private ObservableList<CategoryModel> categorys;
     private StringProperty catInString = new SimpleStringProperty();
 
-    public MovieModel(Movie movie){
-        setIdProperty(movie.getId());
-        setNameProperty(movie.getName());
-        setIMDBRatingProperty(movie.getIMDBRating());
-        setPathToFileProperty(movie.getPathToFile());
-        setLastViewProperty(movie.getLastView());
-        setPersonalRatingProperty(movie.getPersonalRating());
-        categorys = FXCollections.observableArrayList(movie.getCategories().stream().map(cat -> new CategoryModel(cat)).toList());
+    public MovieModel(int id, String name, double IMDBRating, String pathToFile){
+        setIdProperty(id);
+        setNameProperty(name);
+        setIMDBRatingProperty(IMDBRating);
+        setPathToFileProperty(pathToFile);
+        setPersonalRatingProperty(-1.0); // slet måske
+        categorys = FXCollections.observableArrayList();
     }
 
     /**
@@ -58,6 +56,22 @@ public class MovieModel {
      */
     public StringProperty getNameProperty(){
         return name;
+    }
+
+    /**
+     * sets the Date of when the movie was last viewed.
+     * @param lastView
+     */
+    public void setLastView(Date lastView) {
+        this.lastView.set(lastView);
+    }
+
+    /**
+     * used for getting the Date of when the song was viewed last.
+     * @return returns a Date object of when the movie was last viewed.
+     */
+    public ObjectProperty<Date> getLastView() {
+        return lastView;
     }
 
     /**
@@ -112,8 +126,8 @@ public class MovieModel {
      * sets the personal rating of when the movie.
      * @param personalRating a double
      */
-    public void setPersonalRatingProperty(double personalRating) {
-        getPersonalRatingProperty().set(personalRating);
+    public void setPersonalRatingProperty(Double personalRating) {
+        this.personalRating.set(personalRating);
     }
 
     /**
@@ -126,7 +140,7 @@ public class MovieModel {
 
     public StringProperty getCategorys(){
         for (CategoryModel catModel: categorys) {
-            catInString.set((catModel.getNameProperty() + ","));
+            catInString.set((catModel.getNameProperty().get() + ","));
             //String.valueOf(catModel + ","
         }
         return catInString;

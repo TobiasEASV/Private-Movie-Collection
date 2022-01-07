@@ -1,4 +1,4 @@
-package gui.model;
+package be;
 
 import be.Category;
 import javafx.beans.property.IntegerProperty;
@@ -14,9 +14,9 @@ public class CategoryModel {
      * Constructor for a CategoryModel
      * @param category
      */
-    public CategoryModel(Category category){
-        setIdProperty(category.getId());
-        setNameProperty(category.getName());
+    public CategoryModel(int id, String name){
+        setIdProperty(id);
+        setNameProperty(name);
     }
 
     /**
@@ -32,7 +32,7 @@ public class CategoryModel {
      * @param id an int
      */
     public void setIdProperty(int id) {
-        getIdProperty().set(id);
+        this.id.set(id);
     }
 
     /**
@@ -48,7 +48,7 @@ public class CategoryModel {
      * @param name a String
      */
     public void setNameProperty(String name) {
-        getNameProperty().set(name);
+       this.name.set(name);
     }
 
     /**

@@ -1,8 +1,6 @@
 package dal.db;
 
-import be.Category;
-import be.Movie;
-import be.MovieException;
+import be.*;
 import dal.interfaces.IMovieRepository;
 
 import java.io.IOException;
@@ -20,9 +18,9 @@ public class DAOMovie implements IMovieRepository {
     }
 
     @Override
-    public List<Movie> getAllMovies() throws MovieException {
+    public List<MovieModel> getAllMovies() throws MovieException {
 
-        List<Movie> allMovies = new ArrayList<>();
+        List<MovieModel> allMovies = new ArrayList<>();
 
         //Create a connection
         try(Connection connection = databaseConnector.getConnection()){
@@ -42,8 +40,8 @@ public class DAOMovie implements IMovieRepository {
                     String filepath = resultSet.getString("filepath");
                     Date lastview = (Date) resultSet.getObject("lastview");
 
-                    Movie movie = new Movie(movieId, movieTitle, IMDBrating, filepath);
-                    movie.setPersonalRating(personalrating);
+                    MovieModel movie = new MovieModel(movieId, movieTitle, IMDBrating, filepath);
+                    movie.setPersonalRatingProperty(personalrating);
                     movie.setLastView(lastview);
 
                     preparedStatement1.setInt(1,movieId);
@@ -53,7 +51,7 @@ public class DAOMovie implements IMovieRepository {
                             int catId = resultSet1.getInt("id");
                             String catTitle = resultSet1.getString("title");
 
-                            movie.addCategories(new Category(catId, catTitle));
+                            movie.addCatrgroyModel(new CategoryModel(catId, catTitle));
                         }
                     }
                     allMovies.add(movie);
@@ -66,7 +64,7 @@ public class DAOMovie implements IMovieRepository {
     }
 
     @Override
-    public Movie createMovie(String name, double IMDBRating, String pathToFile) throws MovieException {
+    public MovieModel createMovie(String name, double IMDBRating, String pathToFile) throws MovieException {
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -82,7 +80,7 @@ public class DAOMovie implements IMovieRepository {
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
 
-                    return new Movie(id, name, IMDBRating, pathToFile);
+                    return new MovieModel(id, name, IMDBRating, pathToFile);
                 }
             }
         } catch (SQLException SQLex) {
@@ -92,15 +90,15 @@ public class DAOMovie implements IMovieRepository {
     }
 
     @Override
-    public void updateMovie(Movie movie) throws MovieException {
+    public void updateMovie(MovieModel movie) throws MovieException {
 
         try(Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE Movie SET title = ?, filepath=?, IMDBrating=? WHERE Id=?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, movie.getName());
-            preparedStatement.setString(2, movie.getPathToFile());
-            preparedStatement.setDouble(3, movie.getIMDBRating());
-            preparedStatement.setDouble(4, movie.getId());
+            preparedStatement.setString(1, movie.getNameProperty().get());
+            preparedStatement.setString(2, movie.getPathToFileProperty().get());
+            preparedStatement.setDouble(3, movie.getIMDBRatingProperty().get());
+            preparedStatement.setDouble(4, movie.getIdProperty().get());
 
             int affectedRows = preparedStatement.executeUpdate();
             if(affectedRows != 1) {
@@ -111,13 +109,13 @@ public class DAOMovie implements IMovieRepository {
         }
     }
 
-    public void updateLastview(Movie movie) throws MovieException {
+    public void updateLastview(MovieModel movie) throws MovieException {
 
         try(Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE Movie SET lastview = ? WHERE Id= ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setObject(1, movie.getLastView());
-            preparedStatement.setDouble(2, movie.getId());
+            preparedStatement.setDouble(2, movie.getIdProperty().get());
 
             int affectedRows = preparedStatement.executeUpdate();
             if(affectedRows != 1) {
@@ -128,13 +126,13 @@ public class DAOMovie implements IMovieRepository {
         }
     }
 
-    public void updatePersonalRating(Movie movie) throws MovieException {
+    public void updatePersonalRating(MovieModel movie) throws MovieException {
 
         try(Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE Movie SET personalrating = ? WHERE Id= ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDouble(1, movie.getPersonalRating());
-            preparedStatement.setDouble(2, movie.getId());
+            preparedStatement.setDouble(1, movie.getPersonalRatingProperty().get());
+            preparedStatement.setDouble(2, movie.getIdProperty().get());
 
             int affectedRows = preparedStatement.executeUpdate();
             if(affectedRows != 1) {
@@ -145,12 +143,12 @@ public class DAOMovie implements IMovieRepository {
         }
     }
 
-    public void addCategoryToMovie(Category category, Movie movie) throws MovieException {
+    public void addCategoryToMovie(CategoryModel category, MovieModel movie) throws MovieException {
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO CatMovie VALUES (?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, category.getId());
-            preparedStatement.setInt(2, movie.getId());
+            preparedStatement.setInt(1, category.getIdProperty().get());
+            preparedStatement.setInt(2, movie.getIdProperty().get());
             preparedStatement.executeUpdate();
         } catch (SQLException SQLex) {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
@@ -159,12 +157,12 @@ public class DAOMovie implements IMovieRepository {
 
 
     @Override
-    public void deleteMovie(Movie movie) throws MovieException {
+    public void deleteMovie(MovieModel movie) throws MovieException {
 
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "DELETE Movie WHERE id = (?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, movie.getId());
+            preparedStatement.setInt(1, movie.getIdProperty().get());
 
             int affectedRows = preparedStatement.executeUpdate();
             if(affectedRows != 1){

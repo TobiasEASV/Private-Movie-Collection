@@ -2,6 +2,7 @@ package bll;
 
 import be.Movie;
 import be.MovieException;
+import be.MovieModel;
 import bll.util.ISearcher;
 import bll.util.MovieSearcher;
 import dal.db.DAOMovie;
@@ -20,19 +21,19 @@ public class MovieManager {
         daoMovie = new DAOMovie();
     }
 
-    public List<Movie> getAllMovies() throws MovieException {
+    public List<MovieModel> getAllMovies() throws MovieException {
         return daoMovie.getAllMovies();
     }
 
-    public Movie createMovie(String name, double imdbRating, String pathToFile) throws MovieException {
+    public MovieModel createMovie(String name, double imdbRating, String pathToFile) throws MovieException {
         return daoMovie.createMovie(name, imdbRating, pathToFile);
     }
 
-    public void deleteMovie(Movie movie) throws MovieException {
+    public void deleteMovie(MovieModel movie) throws MovieException {
         daoMovie.deleteMovie(movie);
     }
 
-    public void updateMovie(Movie movie) throws MovieException {
+    public void updateMovie(MovieModel movie) throws MovieException {
         daoMovie.updateMovie(movie);
     }
 
@@ -42,9 +43,9 @@ public class MovieManager {
      * @param query the key word, to search for
      * @return a list of songs that fit, the key word
      */
-    public List<Movie> searchMovie(String query) throws MovieException {
-        List<Movie> allMovies = daoMovie.getAllMovies();
-        List<Movie> searchResult = movieSearcher.search(allMovies, query);
+    public List<MovieModel> searchMovie(String query) throws MovieException {
+        List<MovieModel> allMovies = daoMovie.getAllMovies();
+        List<MovieModel> searchResult = movieSearcher.search(allMovies, query);
         return searchResult;
     }
 }

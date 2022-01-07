@@ -1,6 +1,7 @@
 package gui.model;
 
 import be.MovieException;
+import be.MovieModel;
 import bll.MovieManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,7 @@ public class MovieListModel {
 
     public MovieListModel() throws IOException, MovieException {
         movieManager = new MovieManager();
-        movieList = FXCollections.observableArrayList(movieManager.getAllMovies().stream().map(movie -> new MovieModel(movie)).toList());
+        movieList = FXCollections.observableArrayList(movieManager.getAllMovies());
     }
 
     /**
@@ -32,7 +33,8 @@ public class MovieListModel {
      * @param pathToFile
      */
     public void createMovie(String name, double IMDBRating, String pathToFile) throws MovieException {
-        movieList.add(new MovieModel(movieManager.createMovie(name, IMDBRating, pathToFile)));
+        movieList.add(movieManager.createMovie(name, IMDBRating, pathToFile));
+
     }
 
     /**
@@ -40,7 +42,7 @@ public class MovieListModel {
      * @param movieModel
      */
     public void deleteMovie(MovieModel movieModel) throws MovieException {
-        movieManager.deleteMovie(movieModel.convertToMovie());
+        movieManager.deleteMovie(movieModel);
         movieList.remove(movieModel);
     }
 
@@ -51,17 +53,19 @@ public class MovieListModel {
      * @param imdbRating
      * @param personalRating
      */
-    public void updateSong(MovieModel movieModel, String name, double imdbRating, double personalRating) throws MovieException {
+    public void updateMovie(MovieModel movieModel, String name, double imdbRating, double personalRating) throws MovieException {
         movieModel.setNameProperty(name);
         movieModel.setIMDBRatingProperty(imdbRating);
         movieModel.setPersonalRatingProperty(personalRating);
-        movieManager.updateMovie(movieModel.convertToMovie());
+        movieManager.updateMovie(movieModel);
     }
+
 
     /**
      * Searches through song list, to find a Movie that matches the key word
      * @param query the key word, to search for
      */
+    /*
     public void searchSong(String query) throws MovieException {
         List<MovieModel> searchResults = movieManager.searchMovie(query).stream().map(movie ->
                 new MovieModel(movie)).toList();
@@ -69,4 +73,5 @@ public class MovieListModel {
         movieList.clear();
         movieList.addAll((searchResults));
     }
+    */
 }
