@@ -20,7 +20,7 @@ public class MovieManager {
         daoMovie = new DAOMovie();
     }
 
-    public List<Movie> getAllSongs() throws MovieException {
+    public List<Movie> getAllMovies() throws MovieException {
         return daoMovie.getAllMovies();
     }
 
@@ -42,9 +42,9 @@ public class MovieManager {
      * @param query the key word, to search for
      * @return a list of songs that fit, the key word
      */
-    public List<Movie> searchSong(String query) throws MovieException {
-        List<Movie> allSongs = daoMovie.getAllMovies();
-        List<Movie> searchResult = movieSearcher.search(allSongs, query);
+    public List<Movie> searchMovie(String query) throws MovieException {
+        List<Movie> allMovies = daoMovie.getAllMovies();
+        List<Movie> searchResult = movieSearcher.search(allMovies, query);
         return searchResult;
     }
 }

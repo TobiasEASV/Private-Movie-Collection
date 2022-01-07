@@ -28,6 +28,6 @@ public class MovieSearcher implements ISearcher{
     @Override
     public boolean compareToMovieCategory(Movie movie, String query) {
         List<Category> CategoriesToCompare = movie.getCategories();
-        return movie.getCategories().toLowerCase().contains(query.toLowerCase());
+        return true; //movie.getCategories().toLowerCase().contains(query.toLowerCase());
     }
 }
