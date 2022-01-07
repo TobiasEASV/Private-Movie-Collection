@@ -3,6 +3,7 @@ package gui.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -13,6 +14,7 @@ import java.io.File;
 public class NewMovieController {
 
     final FileChooser fileChooser;
+    public Button saveBtn;
     private File file;
 
     @FXML
@@ -44,6 +46,10 @@ public class NewMovieController {
         if (file != null) { //DirectoryChooser returns null if the user closes the browse window
             txtChooseFile.setText(file.getAbsolutePath().replace("\\", "/"));
         }
+    }
+
+    public void handleSavebtn(ActionEvent actionEvent){
+
     }
 }
 
