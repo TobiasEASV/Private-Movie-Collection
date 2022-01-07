@@ -12,8 +12,7 @@ public class CategoryModel {
 
     /**
      * Constructor for a CategoryModel
-     * @param id the id of the category
-     * @param name the name of the category
+     * @param category
      */
     public CategoryModel(Category category){
         setIdProperty(category.getId());
@@ -59,4 +58,5 @@ public class CategoryModel {
     public Category convertToCategory(){
         return new Category(this.id.get(), this.name.get());
     }
+
 }
