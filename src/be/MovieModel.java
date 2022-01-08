@@ -4,7 +4,6 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class MovieModel {
@@ -119,7 +118,7 @@ public class MovieModel {
      * @param lastView
      */
     public void setLastViewProperty(Date lastView) {
-        getLastViewProperty().set(lastView);
+        this.lastView.set(lastView);
     }
 
     /**
@@ -138,12 +137,18 @@ public class MovieModel {
         return personalRating;
     }
 
-    public StringProperty getCategorys(){
+    public StringProperty getAllCategorysAsString(){
+        StringBuilder newList = new StringBuilder();
         for (CategoryModel catModel: categorys) {
-            catInString.set((catModel.getNameProperty().get() + ","));
-            //String.valueOf(catModel + ","
+            newList.append(catModel).append(" ");
         }
+        catInString.set(newList.toString());
+
         return catInString;
+    }
+
+    public ObservableList<CategoryModel> getAllCategoryAsList(){
+        return categorys;
     }
 
     public void addCatrgroyModel(CategoryModel categoryModel){

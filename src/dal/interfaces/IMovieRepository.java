@@ -1,6 +1,5 @@
 package dal.interfaces;
 
-import be.Movie;
 import be.MovieException;
 import be.MovieModel;
 

@@ -8,13 +8,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static be.DisplayMessage.displayMessage;
+
 public class MainController implements Initializable {
+
     @FXML
     private TableView<MovieModel> tvMovies;
     @FXML
@@ -46,6 +50,8 @@ public class MainController implements Initializable {
     private VBox vBoxControllMenu;
 
     @FXML
+    private Button btnEdit;
+    @FXML
     private Button btnAddMovie;
     @FXML
     private Button btnDeleteMovie;
@@ -73,11 +79,35 @@ public class MainController implements Initializable {
 
         tvMovies.setItems(movieListModel.getMovieList());
         tcTitle.setCellValueFactory(addMovie -> addMovie.getValue().getNameProperty());
-        tcCategory.setCellValueFactory(addMovie -> addMovie.getValue().getCategorys());
+        tcCategory.setCellValueFactory(addMovie -> addMovie.getValue().getAllCategorysAsString());
         tcRating.setCellValueFactory(addMovie -> addMovie.getValue().getIMDBRatingProperty().asObject());
 
+        txtTitle.setDisable(true);
+        txtPersonalRating.setDisable(true);
+        txtCategory.setDisable(true);
+        txtimdbRating.setDisable(true);
+
+        tvMovies.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            txtTitle.setText(newValue.getNameProperty().get());
+            txtCategory.setText(newValue.getAllCategorysAsString().get());
+            txtimdbRating.setText(String.valueOf(newValue.getIMDBRatingProperty().get()));
+            txtPersonalRating.setText(String.valueOf(newValue.getPersonalRatingProperty().get()));
+        });
 
 
+
+
+        // Search in all Movies
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                boolean isTitleOn =  cbTitle.isSelected();
+                boolean isCatOn = cbCategory.isSelected();
+                boolean isRatingOn = cbRating.isSelected();
+                movieListModel.searchSong(newValue, isTitleOn, isCatOn, isRatingOn);
+            } catch (MovieException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void handlePlayMovie(ActionEvent actionEvent) {
@@ -86,21 +116,46 @@ public class MainController implements Initializable {
     public void handleAddMovie(ActionEvent actionEvent) {
     }
 
-    public void handleEditMovie(ActionEvent actionEvent) {
+    public void handleEditMovie(ActionEvent actionEvent){
         vBoxControllMenu.getChildren().remove(btnAddMovie);
         vBoxControllMenu.getChildren().remove(btnDeleteMovie);
         vBoxControllMenu.getChildren().add(btnEditSave);
         vBoxControllMenu.getChildren().add(btnEditCancel);
+
+        txtTitle.setDisable(false);
+        txtPersonalRating.setDisable(false);
+        txtCategory.setDisable(false);
+        txtimdbRating.setDisable(false);
+
+        btnEdit.setDisable(true);
+
     }
 
-    public void handleDeleteMovie(ActionEvent actionEvent) {
+    public void handleDeleteMovie(ActionEvent actionEvent) throws MovieException {
+        MovieModel movie = tvMovies.getSelectionModel().selectedItemProperty().get();
+        movieListModel.deleteMovie(movie);
     }
 
-    public void handleEditSave(ActionEvent actionEvent) {
-        vBoxControllMenu.getChildren().remove(btnEditSave);
-        vBoxControllMenu.getChildren().remove(btnEditCancel);
-        vBoxControllMenu.getChildren().add(btnAddMovie);
-        vBoxControllMenu.getChildren().add(btnDeleteMovie);
+    public void handleEditSave(ActionEvent actionEvent) throws MovieException {
+        if( tvMovies.getSelectionModel().selectedItemProperty().get() != null){
+            MovieModel movie = tvMovies.getSelectionModel().selectedItemProperty().get();
+            movieListModel.updateMovie(movie,txtTitle.getText(), Double.parseDouble(txtimdbRating.getText()), Double.parseDouble(txtPersonalRating.getText()) );
+
+            vBoxControllMenu.getChildren().remove(btnEditSave);
+            vBoxControllMenu.getChildren().remove(btnEditCancel);
+            vBoxControllMenu.getChildren().add(btnAddMovie);
+            vBoxControllMenu.getChildren().add(btnDeleteMovie);
+
+            txtTitle.setDisable(true);
+            txtPersonalRating.setDisable(true);
+            txtCategory.setDisable(true);
+            txtimdbRating.setDisable(true);
+
+            btnEdit.setDisable(false);
+        }else{
+            displayMessage("Du skal vælge en film først");
+        }
+
     }
 
     public void handleEditCancel(ActionEvent actionEvent) {
@@ -108,6 +163,13 @@ public class MainController implements Initializable {
         vBoxControllMenu.getChildren().remove(btnEditCancel);
         vBoxControllMenu.getChildren().add(btnAddMovie);
         vBoxControllMenu.getChildren().add(btnDeleteMovie);
+
+        txtTitle.setDisable(true);
+        txtPersonalRating.setDisable(true);
+        txtCategory.setDisable(true);
+        txtimdbRating.setDisable(true);
+
+        btnEdit.setDisable(false);
     }
 
 }

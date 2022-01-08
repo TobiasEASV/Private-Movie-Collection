@@ -12,7 +12,8 @@ public class CategoryModel {
 
     /**
      * Constructor for a CategoryModel
-     * @param category
+     * @param id
+     * @param name
      */
     public CategoryModel(int id, String name){
         setIdProperty(id);
@@ -59,4 +60,8 @@ public class CategoryModel {
         return new Category(this.id.get(), this.name.get());
     }
 
+    @Override
+    public String toString() {
+        return  name.get();
+    }
 }

@@ -1,6 +1,5 @@
 package bll;
 
-import be.Movie;
 import be.MovieException;
 import be.MovieModel;
 import bll.util.ISearcher;
@@ -8,9 +7,7 @@ import bll.util.MovieSearcher;
 import dal.db.DAOMovie;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
 
 public class MovieManager {
     private DAOMovie daoMovie;
@@ -43,9 +40,9 @@ public class MovieManager {
      * @param query the key word, to search for
      * @return a list of songs that fit, the key word
      */
-    public List<MovieModel> searchMovie(String query) throws MovieException {
+    public List<MovieModel> searchMovie(String query, boolean isTitleOn, boolean isCatOn, boolean isRatingOn) throws MovieException {
         List<MovieModel> allMovies = daoMovie.getAllMovies();
-        List<MovieModel> searchResult = movieSearcher.search(allMovies, query);
+        List<MovieModel> searchResult = movieSearcher.search(allMovies, query, isTitleOn, isCatOn, isRatingOn);
         return searchResult;
     }
 }

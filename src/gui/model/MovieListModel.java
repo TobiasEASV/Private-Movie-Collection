@@ -65,13 +65,15 @@ public class MovieListModel {
      * Searches through song list, to find a Movie that matches the key word
      * @param query the key word, to search for
      */
-    /*
-    public void searchSong(String query) throws MovieException {
-        List<MovieModel> searchResults = movieManager.searchMovie(query).stream().map(movie ->
-                new MovieModel(movie)).toList();
 
-        movieList.clear();
-        movieList.addAll((searchResults));
+    public void searchSong(String query, boolean isTitleOn, boolean isCatOn, boolean isRatingOn) throws MovieException {
+        List<MovieModel> searchResults = movieManager.searchMovie(query, isTitleOn, isCatOn, isRatingOn);
+        if(searchResults.isEmpty()){
+            return;
+        }else {
+            movieList.clear();
+            movieList.addAll((searchResults));
+        }
     }
-    */
+
 }

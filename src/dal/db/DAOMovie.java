@@ -173,4 +173,10 @@ public class DAOMovie implements IMovieRepository {
             throw new MovieException(ERROR_STRING, SQLex.fillInStackTrace());
         }
     }
+
+    public static void main(String[] args) throws IOException, MovieException {
+        DAOMovie daoMovie = new DAOMovie();
+        List<MovieModel> test =  daoMovie.getAllMovies();
+        System.out.println(test.get(1).getAllCategorysAsString().get().toString());
+    }
 }

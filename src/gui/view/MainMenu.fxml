@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
+<VBox prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
   <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" style="-fx-background-color: linear-gradient(to bottom, #7d7a79, white);">
          <children>
@@ -75,7 +75,7 @@
                   <Separator prefHeight="3.0" prefWidth="160.0" />
                   <VBox fx:id="vBoxControllMenu" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#handleEditMovie" prefHeight="40.0" prefWidth="114.0" text="Edit Movie" />
+                        <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#handleEditMovie" prefHeight="40.0" prefWidth="114.0" text="Edit Movie" />
                         <Button fx:id="btnAddMovie" mnemonicParsing="false" onAction="#handleAddMovie" prefHeight="40.0" prefWidth="114.0" text="Add Movie" />
                         <Button fx:id="btnDeleteMovie" mnemonicParsing="false" onAction="#handleDeleteMovie" prefHeight="40.0" prefWidth="114.0" text="Delete Movie" />
                         <Button fx:id="btnEditSave" layoutX="48.0" layoutY="166.0" mnemonicParsing="false" onAction="#handleEditSave" prefHeight="40.0" prefWidth="114.0" text="Save" />
@@ -91,7 +91,7 @@
       </HBox>
       <VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="75.0" style="-fx-background-color: linear-gradient(to top, #7d7a79, white);">
          <children>
-            <GridPane alignment="CENTER" hgap="25.0" prefHeight="358.0" prefWidth="100.0" VBox.vgrow="SOMETIMES">
+            <GridPane fx:id="gpEditPadel" alignment="CENTER" hgap="25.0" prefHeight="358.0" prefWidth="100.0" VBox.vgrow="SOMETIMES">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
